@@ -63,7 +63,7 @@ module.exports = function () {
             cb();
         };
 
-        const grid = docstring.split(/\n/).forEach( (row,ri) => {
+        docstring.split(/\n/).forEach( (row,ri) => {
             row.split('').forEach( (cell,ci) => {
                 if( cell.match(/[a-z0-9]/) ) {
                     q.defer(addNode, cell, ri, ci*0.5);
