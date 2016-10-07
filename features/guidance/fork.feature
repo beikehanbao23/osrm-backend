@@ -26,9 +26,11 @@ Feature: Fork Instructions
 
     Scenario: Don't Fork On Single Road
         Given the node map
-            |   |   |   |   | c |
-            | a |   | b |   |   |
-            |   |   |   |   | d |
+            """
+                    c
+            a   b
+                    d
+            """
 
         And the ways
             | nodes  | highway | oneway |
@@ -42,8 +44,10 @@ Feature: Fork Instructions
 
     Scenario: Don't Fork On Single Road
         Given the node map
-            |   |   |   |   |   |   | c |
-            | a |   | b |   | d |   |   |
+            """
+                        c
+            a   b   d
+            """
 
         And the ways
             | nodes  | highway | oneway | name |

@@ -145,8 +145,10 @@ Feature: Simple Turns
 
     Scenario: Three Way Intersection - Meeting Oneways
         Given the node map
-            |   | c |   |
-            | a | b | d |
+            """
+              c
+            a b d
+            """
 
         And the ways
             | nodes  | highway | oneway |
