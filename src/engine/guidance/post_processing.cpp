@@ -1304,29 +1304,21 @@ std::vector<RouteStep> collapseUseLane(std::vector<RouteStep> steps)
         const extractor::guidance::TurnLaneDescription lane_description) {
         // the lane description is given left to right, lanes are counted from the right.
         // Therefore we access the lane description using the reverse iterator
-        for (auto it = lane_description.begin(); it != lane_description.end(); ++it) {
-            std::cout << "lane " << extractor::guidance::TurnLaneType::toString(* it) << " " << * it << std::endl;
-        }
         using iter_type = extractor::guidance::TurnLaneDescription::const_iterator;
-
-        boost::iterator_range<iter_type> left_most_lanes =
-            extractor::guidance::lanesToTheLeft<iter_type>(lanes, lane_description);
-
-        if (!left_most_lanes.empty() && containsTag(left_most_lanes.front(),
-                                                     (extractor::guidance::TurnLaneType::straight |
-                                                      extractor::guidance::TurnLaneType::none)))
-        {
-            return false;
-        }
 
         boost::iterator_range<iter_type> right_most_lanes =
             extractor::guidance::lanesToTheRight<iter_type>(lanes, lane_description);
         if (!right_most_lanes.empty() && containsTag(right_most_lanes.front(),
                                                      (extractor::guidance::TurnLaneType::straight |
                                                       extractor::guidance::TurnLaneType::none)))
-        {
             return false;
-        }
+
+        auto left_most_lanes =
+            extractor::guidance::lanesToTheLeft<iter_type>(lanes, lane_description);
+        if (!left_most_lanes.empty() && containsTag(left_most_lanes.back(),
+                                                    (extractor::guidance::TurnLaneType::straight |
+                                                     extractor::guidance::TurnLaneType::none)))
+            return false;
 
         return true;
     };

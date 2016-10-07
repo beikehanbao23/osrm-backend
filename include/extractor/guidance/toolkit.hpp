@@ -289,18 +289,17 @@ inline std::string applyAccessTokens(std::string lane_string, const std::string 
 template <class Iterator>
 inline boost::iterator_range<Iterator>
 lanesToTheLeft(const util::guidance::LaneTuple lanes,
-               extractor::guidance::TurnLaneDescription lane_description)
+               const extractor::guidance::TurnLaneDescription &lane_description)
 {
-    const auto furthest_left_turn_lane =
+    const auto farthest_left_turn_lane =
         lane_description.size() - (lanes.first_lane_from_the_right + lanes.lanes_in_turn);
     // check that lanes even exist left of the turn lanes
-    if (lane_description.begin() + furthest_left_turn_lane != lane_description.begin())
+    if (farthest_left_turn_lane != 0)
     {
-        // return a range from the furthest left lane, to the first lane left of turn lanes
-        const auto first_left_of_turn_lanes =
-            lane_description.begin() + (furthest_left_turn_lane - 1);
-        const auto first_lane_to_the_left = lane_description.begin();
-        return boost::make_iterator_range(first_lane_to_the_left, first_left_of_turn_lanes);
+        // return a range from the farthest left lane, to the first lane left of turn lanes
+        const auto first_left_of_turn_lanes = lane_description.begin() + (farthest_left_turn_lane);
+        auto out_range = boost::make_iterator_range(lane_description.begin(), first_left_of_turn_lanes);
+        return out_range;
     }
     else
     {
@@ -316,7 +315,7 @@ lanesToTheRight(const util::guidance::LaneTuple &lanes,
     // check that lanes even exist right of the turn lanes
     if (lanes.first_lane_from_the_right > 0)
     {
-        // return a range from the first lane right of turn lanes, and furthest to the right
+        // return a range from the first lane right of turn lanes, and farthest to the right
         const auto first_right_of_turn_lanes =
             lane_description.begin() + (lane_description.size() - lanes.first_lane_from_the_right);
         const auto last_lane_to_the_right = lane_description.end() - 1;
